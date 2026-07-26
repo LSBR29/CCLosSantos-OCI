@@ -48,15 +48,15 @@ Una línea con un único entero que indica el menor número de chayotes que pued
 ### Solución
 
 ```python
-n = int(input())
-k = int(input())
+n = int(input())          # cantidad mínima de chayotes que se necesitan
+k = int(input())          # chayotes por paquete
 
-if n % k == 0:
-    respuesta = n//k
+if n % k == 0:            # si n es múltiplo exacto de k
+    respuesta = n//k      # alcanzan justo n/k paquetes
 else:
-    respuesta = n//k + 1
+    respuesta = n//k + 1  # si sobra un resto, hace falta un paquete más
 
-print(respuesta * k)
+print(respuesta * k)      # total de chayotes comprados = paquetes * k
 ```
 
 ---
@@ -127,9 +127,11 @@ q = int(input())
 # lado_habitacion = a/b
 # lado_baldosa = p/q
 
-resultado = (a * q) // (b * p)   # = a/b // p/q
+# baldosas que caben en una fila = (a/b) / (p/q) = (a*q) / (b*p)
+# la división entera descarta la parte que quedaría cortada
+resultado = (a * q) // (b * p)
 
-print(resultado*resultado)
+print(resultado*resultado)   # el piso es cuadrado, así que se cuenta en las dos dimensiones
 ```
 
 ---
@@ -188,12 +190,13 @@ La salida debe consistir de una línea con un único número entero, la hora en 
 ### Solución
 
 ```python
-p = int(input())
-q = int(input())
-h = int(input())
-t = int(input())
+p = int(input())   # hora inicial del reloj
+q = int(input())   # hora final del reloj
+h = int(input())   # hora actual
+t = int(input())   # horas que van a pasar
 
-horas_totales = q - p + 1
+horas_totales = q - p + 1                          # cuántas horas distintas tiene el reloj
+# se lleva h al rango [0, horas_totales) restando p, se avanza t con módulo y se devuelve al rango real
 resultado = p + ((h - p + t) % horas_totales)
 
 print(resultado)
@@ -235,15 +238,15 @@ Imprima la cantidad de números que existen en el rango desde A hasta B.
 ### Solución
 
 ```python
-n = int(input())
-lista = list(map(int, input().split()))
-a, b = map(int, input().split())
+n = int(input())                          # cantidad de números (no se usa en python pero es una entrada)
+lista = list(map(int, input().split()))   # los números a revisar
+a, b = map(int, input().split())          # extremos del rango [a, b]
 
 resultado = 0
 
 for i in lista:
-    if i in range(a, b + 1):
-        resultado += 1
+    if i in range(a, b + 1):   # si el número está entre a y b (inclusive)
+        resultado += 1         # lo cuenta
 
 print(resultado)
 ```
@@ -287,18 +290,18 @@ resultado = ""
 letras = []
 
 for caracter in texto:
-    if caracter.isalpha():
+    if caracter.isalpha():      # guarda aparte solo las letras
         letras.append(caracter)
 
-letras.sort()
+letras.sort()                   # las ordena alfabéticamente
 
 i = 0
 for caracter in texto:
-    if caracter.isalpha():
-        resultado += letras[i]
+    if caracter.isalpha():      # donde había una letra
+        resultado += letras[i]  # pone la siguiente letra ya ordenada
         i += 1
     else:
-        resultado += caracter
+        resultado += caracter   # los otros caracteres se dejan en su lugar
 
 print(resultado)
 ```
@@ -365,13 +368,13 @@ Una línea con la cadena resultante después de eliminar todas las apariciones d
 n = int(input())
 texto = input()
 
-recorrido = ""
+recorrido = ""            # cadena que se va armando (funciona como una pila)
 
 for letra in texto:
-    recorrido += letra
+    recorrido += letra    # agrega el caracter actual al final
 
-    if recorrido[-3:] == "UPE":
-        recorrido = recorrido[:-3]
+    if recorrido[-3:] == "UPE":     # si al final se acaba de formar "UPE"
+        recorrido = recorrido[:-3]  # se borra, y así se resuelven también los casos que se destapan
 
 print(recorrido)
 ```
@@ -429,14 +432,14 @@ La línea salida deberá tener un único número entero que indica la mínima ca
 ```python
 n, k = map(int, input().split())
 numeros = list(map(int, input().split()))
-veces = n//k
+veces = n//k    # cada número del 1 al k debe aparecer esta cantidad de veces
 
 cantidades_esperadas = dict()
 for num in range(1, k + 1):
-    cantidades_esperadas[num] = veces
+    cantidades_esperadas[num] = veces   # lo que DEBERÍA haber de cada número válido
 
 cantidades_reales = dict()
-for num in numeros:
+for num in numeros:                     # cuenta cuántas veces aparece cada número
     if num in cantidades_reales:
         cantidades_reales[num] += 1
     else:
@@ -444,10 +447,10 @@ for num in numeros:
 
 cambios = 0
 for num, cantidad in cantidades_reales.items():
-    if num not in cantidades_esperadas:
+    if num not in cantidades_esperadas:            # número fuera de 1..k: sobra por completo
         cambios += cantidad
-    elif cantidad > cantidades_esperadas[num]:
-        cambios += cantidad - cantidades_esperadas[num]
+    elif cantidad > cantidades_esperadas[num]:     # hay de más de un número válido
+        cambios += cantidad - cantidades_esperadas[num]   # el excedente se debe reemplazar
 
 print(cambios)
 ```
@@ -513,23 +516,23 @@ La salida debe ser un entero que represente el costo mínimo en céntimos para c
 n = int(input())
 posibles = []
 for _ in range(n):
-    precio_calidad = tuple(map(int, input().split()))
+    precio_calidad = tuple(map(int, input().split()))   # cada bombilla = (precio, calidad)
     posibles.append(precio_calidad)
-m = int(input())
-a = int(input())
+m = int(input())   # cantidad total de bombillas a comprar
+a = int(input())   # de esas, cuántas deben ser de la máxima calidad
 
 total = 0
 
-posibles.sort(key=lambda x: x[0])
-posibles.sort(key=lambda x: x[1], reverse=True)
+posibles.sort(key=lambda x: x[0])                 # ordena por precio (menor primero)
+posibles.sort(key=lambda x: x[1], reverse=True)   # luego por calidad (mayor primero); ante empate queda la más barata
 
-for i in range(a):
+for i in range(a):            # toma las 'a' de mayor calidad
     total += posibles[i][0]
 
-posibles = posibles[a:]
+posibles = posibles[a:]       # quita las que ya se compraron
 
-posibles.sort(key=lambda x: x[0])
-for i in range(m-a):
+posibles.sort(key=lambda x: x[0])   # del resto, ordena por precio
+for i in range(m-a):                # completa con las (m-a) más baratas que queden
     total += posibles[i][0]
 
 print(total)
@@ -584,28 +587,30 @@ Tu tarea es ayudar a Camila y Jonathan a determinar cuánto es el máximo nécta
 ### Solución
 
 ```python
+# Se van a probar y guardar todos los caminos en una tabla
 n = int(input())
-tabla = [[0, 0, 0] for _ in range(n)]
+tabla = [[0, 0, 0] for _ in range(n)]   # tabla[i] = mejor néctar total si en la hora i elige A, B o C
 
 for i in range(n):
-    a, b, c = map(int, input().split())
+    a, b, c = map(int, input().split())   # néctar de A, B y C en la hora i
 
-    if i == 0:
+    if i == 0:                # primera hora: no hay hora previa, solo vale la flor elegida
         tabla[0][0] = a
         tabla[0][1] = b
         tabla[0][2] = c
 
     else:
-        mejor_anterior_A = max(tabla[i-1][1], tabla[i-1][2])   # B o C
+        # no puede repetir tipo, así que a cada flor le suma el mejor de los OTROS dos de la hora anterior
+        mejor_anterior_A = max(tabla[i-1][1], tabla[i-1][2])   # antes de A: B o C
         tabla[i][0] = a + mejor_anterior_A
 
-        mejor_anterior_B = max(tabla[i-1][0], tabla[i-1][2])   # A o C
+        mejor_anterior_B = max(tabla[i-1][0], tabla[i-1][2])   # antes de B: A o C
         tabla[i][1] = b + mejor_anterior_B
 
-        mejor_anterior_C = max(tabla[i-1][0], tabla[i-1][1])   # A o B
+        mejor_anterior_C = max(tabla[i-1][0], tabla[i-1][1])   # antes de C: A o B
         tabla[i][2] = c + mejor_anterior_C
 
-respuesta = max(tabla[n-1][0], tabla[n-1][1], tabla[n-1][2])
+respuesta = max(tabla[n-1][0], tabla[n-1][1], tabla[n-1][2])   # mejor opción de la última hora
 
 print(respuesta)
 ```
@@ -678,32 +683,43 @@ from collections import deque
 def bfs(grafo, arbol):
     visitados = [False] * len(grafo)
     cola = deque()
-    respuesta = [0] * len(grafo)
-    cola.append(arbol)
-    
+
+    respuesta = [0] * len(grafo)    # dígito de salida para cada punto (0 por defecto)
+    cola.append(arbol)              # el BFS arranca desde el árbol (el destino de todos)
+
     visitados[arbol] = True
+
     while cola:
         nodo = cola.popleft()
+
         for vecino in grafo[nodo]:
-            if not visitados[vecino]:
-                visitados[vecino] = True
+            if not visitados[vecino]:          # primera vez que se llega al vecino
+                visitados[vecino] = True       # es su camino más corto hacia el árbol
                 cola.append(vecino)
+
+                # busca por cuál de sus senderos se llegó y guarda esa posición (1, 2 ó 3)
                 for i in range(len(grafo[vecino])):
                     if grafo[vecino][i] == nodo:
                         respuesta[vecino] = i + 1
                         break
     return respuesta
+
 n = int(input())
 grafo = [[] for _ in range(n)]
+
 for i in range(n):
     datos = list(map(int, input().split()))
-    for vecino in datos[1:]:
+
+    for vecino in datos[1:]:      # datos[0] es k_i (se ignora); el resto son los vecinos
         # 1..n a índices 0..n-1
         grafo[i].append(vecino - 1)
-arbol = int(input()) - 1
+
+arbol = int(input()) - 1          # punto donde está el árbol (pasado a índice base 0)
 respuesta = bfs(grafo, arbol)
 resultado = ""
+
 for valor in respuesta:
-    resultado += str(valor)
+    resultado += str(valor)       # une todos los dígitos en una sola hilera
+    
 print(resultado)
 ```
